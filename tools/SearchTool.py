@@ -1,34 +1,12 @@
-import os
-from exa_py import Exa
-from langchain.agents import tool
+# from crewai_tools import  SerperDevTool
+from crewai.tools import tool
+from tavily import TavilyClient
+from dotenv import load_dotenv
 
-class ExaSearchTool:
-	@tool
-	def search(query: str):
-		"""Search for a webpage based on the query."""
-		return ExaSearchTool._exa().search(f"{query}", use_autoprompt=True, num_results=3)
+load_dotenv()
+tavily_client = TavilyClient()
 
-	@tool
-	def find_similar(url: str):
-		"""Search for webpages similar to a given URL.
-		The url passed in should be a URL returned from `search`.
-		"""
-		return ExaSearchTool._exa().find_similar(url, num_results=3)
-
-	@tool
-	def get_contents(ids: str):
-		"""Get the contents of a webpage.
-		The ids must be passed in as a list, a list of ids returned from `search`.
-		"""
-		ids = eval(ids)
-		contents = str(ExaSearchTool._exa().get_contents(ids))
-		print(contents)
-		contents = contents.split("URL:")
-		contents = [content[:1000] for content in contents]
-		return "\n\n".join(contents)
-
-	def tools():
-		return [ExaSearchTool.search, ExaSearchTool.find_similar, ExaSearchTool.get_contents]
-
-	def _exa():
-		return Exa(api_key=os.environ["EXA_API_KEY"])
+@tool("Tavily Search Tool")
+def search_tool(query: str):
+    """A powerful tool for conducting detailed online research about companies, their industry position, key trends, and relevant insights. Ideal for gathering information to support meeting preparation and strategic decision-making"""
+    return tavily_client.search(query, search_depth="advanced", max_results=1, include_raw_content=True)

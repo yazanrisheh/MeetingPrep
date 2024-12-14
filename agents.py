@@ -1,61 +1,68 @@
-from textwrap import dedent
 from crewai import Agent
-from langchain_groq import ChatGroq
+# from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 
-from tools.SearchTool import ExaSearchTool
+from tools.SearchTool import search_tool
+from dotenv import load_dotenv
 
-# llm = ChatOpenAI(model="gpt-4o-mini",  temperature=0.7,  max_retries=3)
-llm = ChatGroq(model="mixtral-8x7b-32768",  temperature=0.7,  max_retries=3)
+load_dotenv()
 
-class MeetingPreparationAgents():
-	def research_agent(self):
-		return Agent(
-			role='Research Specialist',
-			goal='Conduct thorough research on people and companies involved in the meeting',
-			tools=ExaSearchTool.tools(),
-			backstory=dedent("""\
-					As a Research Specialist, your mission is to uncover detailed information
-					about the individuals and entities participating in the meeting. Your insights
-					will lay the groundwork for strategic meeting preparation."""),
-					llm = llm,
-			verbose=True
-		)
+llm = ChatOpenAI(model="gpt-4o-mini",  temperature=0.4,  max_retries=2, max_completion_tokens=10000)
+# llm = ChatGroq(model="mixtral-8x7b-32768",  temperature=0.7,  max_retries=3)
 
-	def industry_analysis_agent(self):
-		return Agent(
-			role='Industry Analyst',
-			goal='Analyze the current industry trends, challenges, and opportunities',
-			tools=ExaSearchTool.tools(),
-			backstory=dedent("""\
-					As an Industry Analyst, your analysis will identify key trends,
-					challenges facing the industry, and potential opportunities that
-					could be leveraged during the meeting for strategic advantage."""),
-                    llm = llm,
-			verbose=True
-		)
 
-	def meeting_strategy_agent(self):
-		return Agent(
-			role='Meeting Strategy Advisor',
-			goal='Develop talking points, questions, and strategic angles for the meeting',
-			tools=ExaSearchTool.tools(),
-			backstory=dedent("""\
-					As a Strategy Advisor, your expertise will guide the development of
-					talking points, insightful questions, and strategic angles
-					to ensure the meeting's objectives are achieved."""),
-					llm=llm,
-			verbose=True
-		)
+# Define the Lead Researcher agent
+lead_researcher_agent = Agent(
+    role="Lead Researcher",
+    goal="Gather and analyze information about {company} and their industry",
+    backstory=(
+        "As a Research Specialist, your mission is to uncover detailed information "
+        "about the individuals and entities participating in the meeting. Your insights "
+        "will lay the groundwork for strategic meeting preparation."
+    ),
+    tools=[search_tool],
+    llm=llm,  # Optional
+    verbose=True,  # Optional
+)
 
-	def summary_and_briefing_agent(self):
-		return Agent(
-			role='Briefing Coordinator',
-			goal='Compile all gathered information into a concise, informative briefing document',
-			tools=ExaSearchTool.tools(),
-			backstory=dedent("""\
-					As the Briefing Coordinator, your role is to consolidate the research,
-					analysis, and strategic insights."""),
-					llm=llm,
-			verbose=True
-		)
+# Define the Product Specialist agent
+product_specialist_agent = Agent(
+    role="Product Specialist",
+    goal="Find key trends, challenges, and opportunities in the industry",
+    backstory=(
+        "As a Product Specialist, your analysis will identify key trends, "
+        "challenges facing the industry, and potential opportunities that "
+        "could be leveraged during the meeting for strategic advantage."
+    ),
+    tools=[search_tool],
+    llm=llm,  # Optional
+    verbose=True,  # Optional
+)
+
+# Define the Sales Strategist agent
+sales_strategist_agent = Agent(
+    role="Sales Strategist",
+    goal="Develop an overall sales approach for {company} and handle potential objections",
+    backstory=(
+        "As a Strategy Advisor, your expertise will guide the development of "
+        "talking points, insightful questions, and strategic angles "
+        "to ensure the meeting's objectives are achieved."
+    ),
+    tools=[search_tool],
+    llm=llm,  # Optional
+    verbose=True,  # Optional
+)
+
+# Define the Briefing Coordinator agent
+briefing_coordinator_agent = Agent(
+    role="Briefing Coordinator",
+    goal="Compile all gathered information into a concise, informative briefing document for the meeting",
+    backstory=(
+        "You are highly organized and skilled at creating effective meeting structures "
+        "that maximize productivity and engagement. Your role is to consolidate the research, "
+        "analysis, and strategic insights."
+    ),
+    tools=[search_tool],
+    llm=llm,  # Optional
+    verbose=True,  # Optional
+)
