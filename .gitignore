@@ -1,5 +1,6 @@
 .env
 VE_meeting/
+VE_prep/
 __pycache__/
 yaz.png
 Dr Ahmed.png
