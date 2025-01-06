@@ -8,5 +8,5 @@ tavily_client = TavilyClient()
 
 @tool("Tavily Search Tool")
 def search_tool(query: str):
-    """A powerful tool for conducting detailed online research about companies, their industry position, key trends, and relevant insights. Ideal for gathering information to support meeting preparation and strategic decision-making"""
-    return tavily_client.search(query, search_depth="advanced", max_results=1, include_raw_content=True)
+    """A powerful tool for conducting detailed online research about companies, their industry position, key trends, and relevant insights using statistics, facts, and numbers. Ideal for gathering information to support meeting preparation and strategic decision-making"""
+    return tavily_client.search(query, search_depth="advanced", max_results=3, include_raw_content=False)

@@ -42,7 +42,7 @@ product_specialist_agent = Agent(
 # Define the Sales Strategist agent
 sales_strategist_agent = Agent(
     role="Sales Strategist",
-    goal="Develop an overall sales approach for {company} and handle potential objections",
+    goal="Develop an overall sales approach for {company} and handle potential objections in details",
     backstory=(
         "As a Strategy Advisor, your expertise will guide the development of "
         "talking points, insightful questions, and strategic angles "
@@ -56,7 +56,7 @@ sales_strategist_agent = Agent(
 # Define the Briefing Coordinator agent
 briefing_coordinator_agent = Agent(
     role="Briefing Coordinator",
-    goal="Compile all gathered information into a concise, informative briefing document for the meeting",
+    goal="Compile all gathered information into a concise yet informative and detailed briefing document for the meeting",
     backstory=(
         "You are highly organized and skilled at creating effective meeting structures "
         "that maximize productivity and engagement. Your role is to consolidate the research, "

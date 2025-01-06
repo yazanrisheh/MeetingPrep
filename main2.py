@@ -13,65 +13,21 @@ from agents import (
     sales_strategist_agent,
     briefing_coordinator_agent,
 )
-from PIL import Image
 import time
 import base64
-
 
 # Load environment variables
 load_dotenv()
 
 st.set_page_config(page_title="AI-Powered Meeting Hub", page_icon="📊", layout="wide")
 
-# Function to fix logo transparency
-def fix_logo_background(image_path, background_color="white"):
-    image = Image.open(image_path)
-    if image.mode in ('RGBA', 'LA') or (image.mode == 'P' and 'transparency' in image.info):
-        background = Image.new("RGB", image.size, background_color)
-        background.paste(image, mask=image.getchannel('A') if 'A' in image.mode else None)
-        return background
-    return image
-
 # Function to generate download link
 def generate_download_link(content, filename, file_type):
     b64 = base64.b64encode(content.encode()).decode()
     return f'<a href="data:file/{file_type};base64,{b64}" download="{filename}">Download {filename}</a>'
 
-# Sidebar with Crowe Title and Team Details
-st.sidebar.title("Crowe Pioneering & Excellence Team")
-st.sidebar.markdown("---")  # Divider
-
-# Dr. Ahmad's Section
-st.sidebar.image("Dr Ahmed.png", caption="Dr. Ahmad AlTarawneh", use_container_width=True)
-st.sidebar.markdown("""
-**Dr. Ahmad AlTarawneh**  
-*Engagement Partner*  
-📞 +971 55 400 0296  
-✉️ [ahmed.tarawneh@crowe.ae](mailto:ahmed.tarawneh@crowe.ae)  
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown("---")
-
-# Yazan's Section
-st.sidebar.image("yaz.png", caption="Yazan Risheh", use_container_width=True)
-st.sidebar.markdown("""
-**Yazan Risheh**  
-*AI Engineer*    
-📞 +971 50 910 8917  
-✉️ [yazan.risheh@crowe.ae](mailto:yazan.risheh@crowe.ae) 
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown("---")
-
 # Set up Streamlit Layout
-
-# Display Logo and Title
-col1, col2 = st.columns([0.2, 0.8])
-with col1:
-    logo = fix_logo_background("Crowe Logo.png")  # Fix transparency
-    st.image(logo, width=150)
-with col2:
-    st.title("AI-Powered Client Meeting Preparation Hub")
+st.title("AI-Powered Client Meeting Preparation Hub")
 
 # Add spacing and style to Meeting Details
 st.markdown("## 📋 **Meeting Details**", unsafe_allow_html=True)
@@ -92,8 +48,6 @@ with col2:
 # Full-width Input
 meeting_objective = st.text_area("🎯 Meeting Objective", placeholder="What do you aim to achieve in the meeting?")
 prior_interactions = st.text_area("🔄 Prior Interactions", placeholder="Provide any details from previous meetings. Type none if no interaction")
-
-# Function for progress bar updates
 
 # Run the Crew Workflow
 if st.button("🚀 Run Meeting Preparation"):
@@ -153,12 +107,3 @@ if st.button("🚀 Run Meeting Preparation"):
 
         except Exception as e:
             st.error(f"❗ An error occurred during the workflow execution: {str(e)}")
-
-# Footer
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; font-size: small;">
-    <b>© 2024 Crowe Pioneering & Excellence. All Rights Reserved.</b>  
-    Built by Yazan Risheh.
-</div>
-""", unsafe_allow_html=True)
